@@ -11,7 +11,7 @@ import java.util.Collection;
 public class PrimesService implements PrimesApi {
 
     @Override
-    public boolean isPrime(int number) {
+    public boolean isPrime(int numberToCheck) {
         return false;
     }
 

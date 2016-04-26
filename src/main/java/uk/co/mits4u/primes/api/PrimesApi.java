@@ -28,7 +28,7 @@ public interface PrimesApi {
     @Path("/{number}/isPrime")
     @Produces(MediaType.APPLICATION_JSON)
     boolean isPrime(@ApiParam(value = "less then 2^31", required = true)
-                    @PathParam("numberToCheck") int number);
+                    @PathParam("number") int numberToCheck);
 
 
 }
