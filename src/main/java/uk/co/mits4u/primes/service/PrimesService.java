@@ -1,22 +1,51 @@
 package uk.co.mits4u.primes.service;
 
+import org.apache.commons.lang3.Validate;
 import org.springframework.stereotype.Service;
-import uk.co.mits4u.primes.api.PrimesAlgorithm;
+import uk.co.mits4u.primes.api.AlgorithmName;
 import uk.co.mits4u.primes.api.PrimesApi;
-
-import java.util.Arrays;
-import java.util.Collection;
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import java.util.*;
 
 @Service
 public class PrimesService implements PrimesApi {
 
-    @Override
-    public boolean isPrime(int numberToCheck) {
-        return false;
+    private Map<AlgorithmName, PrimeStrategy> strategies;
+    @Resource
+    private PrimeStrategy eratosthenesPrimeStrategy;
+
+
+    @PostConstruct
+    private void postConstruct() {
+        strategies = new EnumMap<>(AlgorithmName.class);
+        strategies.put(AlgorithmName.ERATOSTHENES, eratosthenesPrimeStrategy);
     }
 
     @Override
-    public Collection<Integer> getPrimesInRange(int floor, int ceiling, PrimesAlgorithm primesAlgorithm) {
-        return Arrays.asList(new Integer[]{1, 2, 3});
+    public boolean isPrime(int numberToCheck, AlgorithmName algorithmName) {
+
+        PrimeStrategy primeStrategy = resolveStrategy(algorithmName);
+
+        return primeStrategy.isPrime(numberToCheck);
+
+    }
+
+    @Override
+    public Collection<Integer> getPrimesInRange(int floor, int ceiling, AlgorithmName algorithmName) {
+
+        PrimeStrategy primeStrategy = resolveStrategy(algorithmName);
+
+        return primeStrategy.getPrimesInRange(floor, ceiling);
+
+    }
+
+    private PrimeStrategy resolveStrategy(AlgorithmName algorithm) {
+
+        PrimeStrategy primeStrategy = strategies.get(algorithm);
+
+        Validate.notNull(primeStrategy, "Could note resolve prime strategy for '" + algorithm + "' algorithm");
+
+        return primeStrategy;
     }
 }
