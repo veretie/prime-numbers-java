@@ -4,6 +4,7 @@ import org.apache.commons.lang3.Validate;
 import org.springframework.stereotype.Service;
 import uk.co.mits4u.primes.api.AlgorithmName;
 import uk.co.mits4u.primes.api.PrimesApi;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.*;
@@ -13,11 +14,13 @@ public class PrimesService implements PrimesApi {
 
     private Map<AlgorithmName, PrimeStrategy> strategies;
     @Resource
+    private NumberValidator numberValidator;
+    @Resource
     private PrimeStrategy eratosthenesPrimeStrategy;
 
 
     @PostConstruct
-    private void postConstruct() {
+    protected void postConstruct() {
         strategies = new EnumMap<>(AlgorithmName.class);
         strategies.put(AlgorithmName.ERATOSTHENES, eratosthenesPrimeStrategy);
     }
@@ -25,6 +28,7 @@ public class PrimesService implements PrimesApi {
     @Override
     public boolean isPrime(int numberToCheck, AlgorithmName algorithmName) {
 
+        numberValidator.validateNumber(numberToCheck);
         PrimeStrategy primeStrategy = resolveStrategy(algorithmName);
 
         return primeStrategy.isPrime(numberToCheck);
@@ -34,6 +38,7 @@ public class PrimesService implements PrimesApi {
     @Override
     public Collection<Integer> getPrimesInRange(int floor, int ceiling, AlgorithmName algorithmName) {
 
+        numberValidator.validateRange(floor, ceiling);
         PrimeStrategy primeStrategy = resolveStrategy(algorithmName);
 
         return primeStrategy.getPrimesInRange(floor, ceiling);
