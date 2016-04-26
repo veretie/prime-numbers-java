@@ -52,7 +52,7 @@ public class PrimesApiIT {
     @Test
     public void calculatePrimes() throws Exception {
 
-        base = new URL("http://localhost:" + port + "/numbers/primes?floor=0&ceiling=10&algorithm=TWO");
+        base = new URL("http://localhost:" + port + "/numbers/primes?floor=0&ceiling=10&algorithm=ERATOSTHENES");
         ResponseEntity<Collection> response = template.getForEntity(base.toString(), Collection.class);
 
         Collection<Integer> primes = response.getBody();
