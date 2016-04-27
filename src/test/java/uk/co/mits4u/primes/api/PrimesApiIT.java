@@ -59,7 +59,7 @@ public class PrimesApiIT {
         Collection<Integer> primes = response.getBody();
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(primes).containsExactly(1, 2, 3);
+        assertThat(primes).containsExactly(2, 3, 5, 7);
 
     }
 
