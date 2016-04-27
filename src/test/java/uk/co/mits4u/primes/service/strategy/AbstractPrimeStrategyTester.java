@@ -1,9 +1,7 @@
 package uk.co.mits4u.primes.service.strategy;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
+import uk.co.mits4u.primes.service.PrimeStrategy;
 
 import java.util.Collection;
 import java.util.List;
@@ -12,28 +10,28 @@ import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EratosthenesPrimeStrategyTest {
+public class AbstractPrimeStrategyTester {
 
-    @InjectMocks
-    private EratosthenesPrimeStrategy eratosthenesPrimeStrategy;
+
+    private PrimeStrategy primeStrategy;
     private int[] primes;
 
-    @Before
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
+    public AbstractPrimeStrategyTester(PrimeStrategy primeStrategy) {
+        this.primeStrategy = primeStrategy;
         primes = new int[]{2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97};
+
     }
 
     @Test
     public void testZero() throws Exception {
-        boolean isPrime = eratosthenesPrimeStrategy.isPrime(0);
+        boolean isPrime = primeStrategy.isPrime(0);
         assertThat(isPrime).isFalse();
     }
 
     @Test
     public void testIsPrime() throws Exception {
 
-        IntStream.of(primes).mapToObj(prime -> eratosthenesPrimeStrategy.isPrime(prime)).forEach(
+        IntStream.of(primes).mapToObj(prime -> primeStrategy.isPrime(prime)).forEach(
                 isPrime -> assertThat(isPrime).isTrue()
         );
 
@@ -43,16 +41,15 @@ public class EratosthenesPrimeStrategyTest {
     public void testIsNotPrime() throws Exception {
 
         int[] nonPrimes = new int[]{1, 4, 6, 8, 9, 10, 12, 14, 16, 18, 20};
-        IntStream.of(nonPrimes).mapToObj(prime -> eratosthenesPrimeStrategy.isPrime(prime)).forEach(
+        IntStream.of(nonPrimes).mapToObj(prime -> primeStrategy.isPrime(prime)).forEach(
                 isPrime -> assertThat(isPrime).isFalse()
         );
 
     }
 
-
     @Test
     public void testGenerateRange() throws Exception {
-        Collection<Integer> primeResults = eratosthenesPrimeStrategy.generatePrimes(100);
+        Collection<Integer> primeResults = primeStrategy.generatePrimes(100);
         List<Integer> expectedResults = IntStream.of(primes).mapToObj(i -> i).collect(Collectors.toList());
         assertThat(primeResults).containsOnlyElementsOf(expectedResults);
     }
@@ -63,7 +60,7 @@ public class EratosthenesPrimeStrategyTest {
         int bigPrime = 101483783;
         runGcAndPrintDetails(bigPrime);
 
-        boolean isPrime = eratosthenesPrimeStrategy.isPrime(bigPrime);
+        boolean isPrime = primeStrategy.isPrime(bigPrime);
         assertThat(isPrime).isTrue();
 
     }
@@ -74,7 +71,7 @@ public class EratosthenesPrimeStrategyTest {
         int bigPrime = 100000000;
         runGcAndPrintDetails(bigPrime);
 
-        boolean isPrime = eratosthenesPrimeStrategy.isPrime(bigPrime);
+        boolean isPrime = primeStrategy.isPrime(bigPrime);
         assertThat(isPrime).isFalse();
 
     }
@@ -86,5 +83,6 @@ public class EratosthenesPrimeStrategyTest {
         long memoryAvailable = runtime.freeMemory() / 1024 / 1024;
         System.out.println("approximate memory needed " + memoryMbNeeded + " MB; available: " + memoryAvailable + " MB");
     }
+
 
 }
