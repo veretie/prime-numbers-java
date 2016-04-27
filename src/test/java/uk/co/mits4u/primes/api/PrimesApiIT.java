@@ -17,7 +17,8 @@ import uk.co.mits4u.primes.Application;
 import java.net.URL;
 import java.util.Collection;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
