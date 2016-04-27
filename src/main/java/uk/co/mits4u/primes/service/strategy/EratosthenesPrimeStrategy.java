@@ -1,12 +1,21 @@
 package uk.co.mits4u.primes.service.strategy;
 
-import com.google.common.collect.Lists;
 import org.springframework.stereotype.Component;
 import uk.co.mits4u.primes.service.PrimeStrategy;
+
+import javax.annotation.concurrent.ThreadSafe;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+import static java.lang.Boolean.*;
 
 @Component
+@ThreadSafe
 public class EratosthenesPrimeStrategy implements PrimeStrategy {
+
+    private static int FIRST_PRIME = 2;
 
     @Override
     public boolean isPrime(int numberToCheck) {
@@ -15,46 +24,46 @@ public class EratosthenesPrimeStrategy implements PrimeStrategy {
     }
 
     @Override
-    public Collection<Integer> generatePrimes(int limit) {
+    public Collection<Integer> generatePrimes(int maxPrime) {
 
-        boolean[] numbers = new boolean[limit + 1];
-        Arrays.fill(numbers, true);
+        Vector<Boolean> primeFlags = initAllAsPrime(maxPrime);
 
-        int prime = 2;
+        markNonPrimes(maxPrime, primeFlags);
 
-        while (prime <= Math.sqrt(limit)) {
-            crossOff(numbers, prime);
-            prime = findNextPrime(numbers, prime);
-            System.out.println("processed prime: " + prime);
-        }
+        Collection<Integer> primes = collectPrimes(primeFlags);
 
-
-        return collectPrimes(numbers);
-
-    }
-
-    private int findNextPrime(boolean[] numbers, int prime) {
-        int nextPrime = prime + 1;
-        while (nextPrime < numbers.length && !numbers[nextPrime]) {
-            nextPrime++;
-        }
-        return nextPrime;
-    }
-
-    private void crossOff(boolean[] numbers, int prime) {
-        for (int i = prime * prime; i < numbers.length; i += prime) {
-            numbers[i] = false;
-        }
-    }
-
-    private Collection<Integer> collectPrimes(boolean[] numbers) {
-        List<Integer> primes = Lists.newLinkedList();
-        for (int i = 2; i < numbers.length; i++) {
-            if (numbers[i]) {
-                primes.add(i);
-            }
-        }
         return primes;
+
+    }
+
+    private Vector<Boolean> initAllAsPrime(int limit) {
+        int capacity = limit + 1;
+        Vector<Boolean> flags = new Vector<>(capacity);
+        IntStream.range(0, capacity).forEach(i -> flags.add(i, TRUE));
+        return flags;
+    }
+
+    private void markNonPrimes(int limit, Vector<Boolean> primeFlags) {
+
+        int maxPotentialPrime = (int) Math.sqrt(limit);
+
+        Stream.iterate(FIRST_PRIME, i -> ++i).limit(maxPotentialPrime - 1)
+                .parallel().forEach(potentialPrime -> markMultiplesAsNonPrimes(potentialPrime, primeFlags)
+        );
+
+    }
+
+    private void markMultiplesAsNonPrimes(int prime, Vector<Boolean> primeFlags) {
+        for (int i = prime * prime; i < primeFlags.size(); i += prime) {
+            primeFlags.set(i, FALSE);
+        }
+    }
+
+    private Collection<Integer> collectPrimes(Vector<Boolean> primeFlags) {
+        return IntStream.range(FIRST_PRIME, primeFlags.size())
+                .filter(index -> primeFlags.get(index) == TRUE)
+                .mapToObj(prime -> prime)
+                .collect(Collectors.toList());
     }
 
 
