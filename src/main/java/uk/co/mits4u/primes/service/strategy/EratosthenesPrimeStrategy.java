@@ -1,5 +1,6 @@
 package uk.co.mits4u.primes.service.strategy;
 
+import com.google.common.collect.Lists;
 import org.springframework.stereotype.Component;
 import uk.co.mits4u.primes.service.PrimeStrategy;
 
@@ -8,8 +9,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-
-import static java.lang.Boolean.*;
 
 @Component
 @ThreadSafe
@@ -26,7 +25,11 @@ public class EratosthenesPrimeStrategy implements PrimeStrategy {
     @Override
     public Collection<Integer> generatePrimes(int maxPrime) {
 
-        Vector<Boolean> primeFlags = initAllAsPrime(maxPrime);
+        if (maxPrime == 0) {
+            return Lists.newLinkedList();
+        }
+
+        boolean[] primeFlags = initAllAsPrime(maxPrime);
 
         markNonPrimes(maxPrime, primeFlags);
 
@@ -36,14 +39,13 @@ public class EratosthenesPrimeStrategy implements PrimeStrategy {
 
     }
 
-    private Vector<Boolean> initAllAsPrime(int limit) {
-        int capacity = limit + 1;
-        Vector<Boolean> flags = new Vector<>(capacity);
-        IntStream.range(0, capacity).forEach(i -> flags.add(i, TRUE));
+    private boolean[] initAllAsPrime(int limit) {
+        boolean[] flags = new boolean[limit + 1];
+        Arrays.fill(flags, true);
         return flags;
     }
 
-    private void markNonPrimes(int limit, Vector<Boolean> primeFlags) {
+    private void markNonPrimes(int limit, boolean[] primeFlags) {
 
         int maxPotentialPrime = (int) Math.sqrt(limit);
 
@@ -53,15 +55,15 @@ public class EratosthenesPrimeStrategy implements PrimeStrategy {
 
     }
 
-    private void markMultiplesAsNonPrimes(int prime, Vector<Boolean> primeFlags) {
-        for (int i = prime * prime; i < primeFlags.size(); i += prime) {
-            primeFlags.set(i, FALSE);
+    private void markMultiplesAsNonPrimes(int prime, boolean[] primeFlags) {
+        for (int i = prime * prime; i < primeFlags.length; i += prime) {
+            primeFlags[i] = false;
         }
     }
 
-    private Collection<Integer> collectPrimes(Vector<Boolean> primeFlags) {
-        return IntStream.range(FIRST_PRIME, primeFlags.size())
-                .filter(index -> primeFlags.get(index) == TRUE)
+    private Collection<Integer> collectPrimes(boolean[] primeFlags) {
+        return IntStream.range(FIRST_PRIME, primeFlags.length)
+                .filter(index -> primeFlags[index])
                 .mapToObj(prime -> prime)
                 .collect(Collectors.toList());
     }
