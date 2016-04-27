@@ -14,8 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class EratosthenesPrimeStrategyTest {
 
-
-
     @InjectMocks
     private EratosthenesPrimeStrategy eratosthenesPrimeStrategy;
     private int[] primes;
@@ -60,19 +58,28 @@ public class EratosthenesPrimeStrategyTest {
     }
 
     @Test
-    public void testIsNotPrimeBigNumbers() {
+    public void testIsPrimeBigNumbers() {
 
-        int bigPrime = 171748941;
-        printMemoryDetails(bigPrime);
+        int bigPrime = 101483783;
+        runGcAndPrintDetails(bigPrime);
 
         boolean isPrime = eratosthenesPrimeStrategy.isPrime(bigPrime);
+        assertThat(isPrime).isTrue();
 
+    }
+
+    @Test
+    public void testIsNotPrimeBigNumbers() {
+
+        int bigPrime = 100000000;
+        runGcAndPrintDetails(bigPrime);
+
+        boolean isPrime = eratosthenesPrimeStrategy.isPrime(bigPrime);
         assertThat(isPrime).isFalse();
 
     }
 
-
-    private void printMemoryDetails(int bigPrime) {
+    private void runGcAndPrintDetails(int bigPrime) {
         Runtime runtime = Runtime.getRuntime();
         runtime.gc();
         long memoryMbNeeded = bigPrime / 8 / 1024 / 1024;
