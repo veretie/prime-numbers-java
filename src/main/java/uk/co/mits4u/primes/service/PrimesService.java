@@ -1,5 +1,6 @@
 package uk.co.mits4u.primes.service;
 
+import com.google.common.collect.ImmutableSortedSet;
 import org.apache.commons.lang3.Validate;
 import org.springframework.stereotype.Service;
 import uk.co.mits4u.primes.api.AlgorithmName;
@@ -17,7 +18,6 @@ public class PrimesService implements PrimesApi {
     private NumberValidator numberValidator;
     @Resource
     private PrimeStrategy eratosthenesPrimeStrategy;
-
 
     @PostConstruct
     protected void postConstruct() {
@@ -41,7 +41,10 @@ public class PrimesService implements PrimesApi {
         numberValidator.validateRange(floor, ceiling);
         PrimeStrategy primeStrategy = resolveStrategy(algorithmName);
 
-        return primeStrategy.getPrimesInRange(floor, ceiling);
+        Collection<Integer> allPrimes = primeStrategy.generatePrimes(ceiling);
+        ImmutableSortedSet primesInRange = ImmutableSortedSet.copyOf(allPrimes).subSet(floor, true, ceiling, true);
+
+        return primesInRange;
 
     }
 

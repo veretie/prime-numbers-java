@@ -4,7 +4,7 @@ import java.util.Collection;
 
 public interface PrimeStrategy {
 
-    Collection<Integer> getPrimesInRange(int floor, int ceiling);
+    Collection<Integer> generatePrimes(int limitingNumber);
 
     boolean isPrime(int numberToCheck);
 
