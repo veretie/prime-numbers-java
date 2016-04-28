@@ -8,6 +8,8 @@ import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.stereotype.Component;
 
+import static uk.co.mits4u.primes.service.NumberValidator.MAX_NUMBER;
+
 @Component
 public class NumberValidatorTest {
 
@@ -28,7 +30,7 @@ public class NumberValidatorTest {
 
     @Test
     public void testValidateMaxRange() throws Exception {
-        numberValidator.validateRange(0, Integer.MAX_VALUE);
+        numberValidator.validateRange(0, MAX_NUMBER);
     }
 
     @Test
@@ -38,7 +40,7 @@ public class NumberValidatorTest {
 
     @Test
     public void testValidateZeroRangeAtMax() throws Exception {
-        numberValidator.validateRange(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        numberValidator.validateRange(MAX_NUMBER, MAX_NUMBER);
     }
 
     @Test
@@ -50,7 +52,7 @@ public class NumberValidatorTest {
 
     @Test
     public void testMaxNumber() throws Exception {
-        numberValidator.validateNumber(Integer.MAX_VALUE);
+        numberValidator.validateNumber(MAX_NUMBER);
     }
 
     @Test
@@ -64,5 +66,13 @@ public class NumberValidatorTest {
         expectedException.expectMessage("prime cannot be negative. [-1] is invalid");
         numberValidator.validateNumber(-1);
     }
+
+    @Test
+    public void testNumberTooBig() throws Exception {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("[16777217] is invalid. Select number <= 16777216 = 2^24");
+        numberValidator.validateNumber(MAX_NUMBER + 1);
+    }
+
 
 }

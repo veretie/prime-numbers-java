@@ -37,6 +37,19 @@ public class PrimesApiIT {
     }
 
     @Test
+    public void isPrimeForBiggestAllowed() throws Exception {
+
+        base = new URL("http://localhost:" + port + "/numbers/16777213/isPrime");
+        ResponseEntity<Boolean> response = template.getForEntity(base.toString(), Boolean.class);
+
+        Boolean isPrime = response.getBody();
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(isPrime).isTrue();
+
+    }
+
+    @Test
     public void isNonPrime() throws Exception {
 
         base = new URL("http://localhost:" + port + "/numbers/10/isPrime");

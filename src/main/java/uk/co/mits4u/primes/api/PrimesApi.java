@@ -27,7 +27,7 @@ public interface PrimesApi {
     @GET
     @Path("/{number}/isPrime")
     @Produces(MediaType.APPLICATION_JSON)
-    boolean isPrime(@ApiParam(value = "less then 2^31", required = true)
+    boolean isPrime(@ApiParam(value = "less then 2^24 = 16777216", required = true)
                     @PathParam("number") int numberToCheck,
                     @ApiParam(value = "algorithm", required = false)
                     @QueryParam("algorithm") @DefaultValue("ERATOSTHENES") AlgorithmName algorithmName);
