@@ -1,4 +1,4 @@
-package uk.co.mits4u.primes;
+package uk.co.mits4u.primes.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

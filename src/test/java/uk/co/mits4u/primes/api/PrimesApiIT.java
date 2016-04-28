@@ -19,7 +19,6 @@ import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
@@ -107,8 +106,8 @@ public class PrimesApiIT {
 
         String responseBody = response.getBody();
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-        assertThat(responseBody).contains("Internal Server Error");
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(responseBody).contains("floor [10] cannot be higher then ceiling [1]");
 
     }
 

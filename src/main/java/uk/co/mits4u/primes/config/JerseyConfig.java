@@ -1,4 +1,4 @@
-package uk.co.mits4u.primes;
+package uk.co.mits4u.primes.config;
 
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
@@ -17,6 +17,7 @@ public class JerseyConfig extends ResourceConfig {
     public JerseyConfig() {
         registerEndpoints();
         configureSwagger();
+        packages(this.getClass().getPackage().toString());
     }
 
     private void configureSwagger() {
