@@ -18,11 +18,14 @@ public class PrimesService implements PrimesApi {
     private NumberValidator numberValidator;
     @Resource
     private PrimeStrategy eratosthenesPrimeStrategy;
+    @Resource
+    private PrimeStrategy sundaramPrimeStrategy;
 
     @PostConstruct
     protected void postConstruct() {
         strategies = new EnumMap<>(AlgorithmName.class);
         strategies.put(AlgorithmName.ERATOSTHENES, eratosthenesPrimeStrategy);
+        strategies.put(AlgorithmName.SUNDARAM, sundaramPrimeStrategy);
     }
 
     @Override
@@ -42,7 +45,7 @@ public class PrimesService implements PrimesApi {
         PrimeStrategy primeStrategy = resolveStrategy(algorithmName);
 
         Collection<Integer> allPrimes = primeStrategy.generatePrimes(ceiling);
-        ImmutableSortedSet primesInRange = ImmutableSortedSet.copyOf(allPrimes).subSet(floor, true, ceiling, true);
+        ImmutableSortedSet<Integer> primesInRange = ImmutableSortedSet.copyOf(allPrimes).subSet(floor, true, ceiling, true);
 
         return primesInRange;
 

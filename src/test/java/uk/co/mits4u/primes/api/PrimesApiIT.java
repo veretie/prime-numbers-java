@@ -38,7 +38,7 @@ public class PrimesApiIT {
     }
 
     @Test
-    public void isPrime() throws Exception {
+    public void isNonPrime() throws Exception {
 
         base = new URL("http://localhost:" + port + "/numbers/10/isPrime");
         ResponseEntity<Boolean> response = template.getForEntity(base.toString(), Boolean.class);
@@ -51,15 +51,64 @@ public class PrimesApiIT {
     }
 
     @Test
-    public void calculatePrimes() throws Exception {
+    public void isPrimeWithChosenStrategy() throws Exception {
 
-        base = new URL("http://localhost:" + port + "/numbers/primes?floor=0&ceiling=10&algorithm=ERATOSTHENES");
+        base = new URL("http://localhost:" + port + "/numbers/101/isPrime?algorithm=SUNDARAM");
+        ResponseEntity<Boolean> response = template.getForEntity(base.toString(), Boolean.class);
+
+        Boolean isPrime = response.getBody();
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(isPrime).isTrue();
+
+    }
+
+    @Test
+    public void calculatePrimesWithDefaults() throws Exception {
+
+        base = new URL("http://localhost:" + port + "/numbers/primes?ceiling=10");
         ResponseEntity<Collection> response = template.getForEntity(base.toString(), Collection.class);
 
         Collection<Integer> primes = response.getBody();
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(primes).containsExactly(2, 3, 5, 7);
+
+    }
+
+    @Test
+    public void calculatePrimesWithSpecifiedRangeAndAlgorithm() throws Exception {
+
+        base = new URL("http://localhost:" + port + "/numbers/primes?floor=0&ceiling=10&algorithm=SUNDARAM");
+        ResponseEntity<Collection> response = template.getForEntity(base.toString(), Collection.class);
+
+        Collection<Integer> primes = response.getBody();
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(primes).containsExactly(2, 3, 5, 7);
+
+    }
+
+    @Test
+    public void calculatePrimesWithLetters() throws Exception {
+
+        base = new URL("http://localhost:" + port + "/numbers/one/isPrime");
+        ResponseEntity<String> response = template.getForEntity(base.toString(), String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+
+    }
+
+    @Test
+    public void calculatePrimesForWrongRange() throws Exception {
+
+        base = new URL("http://localhost:" + port + "/numbers/primes?floor=10&ceiling=1");
+        ResponseEntity<String> response = template.getForEntity(base.toString(), String.class);
+
+        String responseBody = response.getBody();
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+        assertThat(responseBody).contains("Internal Server Error");
 
     }
 
