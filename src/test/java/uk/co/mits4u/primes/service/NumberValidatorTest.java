@@ -7,9 +7,6 @@ import org.junit.rules.ExpectedException;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.stereotype.Component;
-import uk.co.mits4u.primes.service.strategy.EratosthenesPrimeStrategy;
-
-import static org.junit.Assert.*;
 
 @Component
 public class NumberValidatorTest {

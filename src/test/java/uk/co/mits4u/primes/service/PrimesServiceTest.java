@@ -9,12 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import uk.co.mits4u.primes.api.AlgorithmName;
-import uk.co.mits4u.primes.service.strategy.EratosthenesPrimeStrategy;
-
 import java.util.Collection;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 
 public class PrimesServiceTest {
@@ -26,7 +22,7 @@ public class PrimesServiceTest {
     @Mock
     private NumberValidator numberValidator;
     @Mock
-    private EratosthenesPrimeStrategy eratosthenesPrimeStrategy;
+    private PrimeStrategy eratosthenesPrimeStrategy;
 
     @Before
     public void setUp() {

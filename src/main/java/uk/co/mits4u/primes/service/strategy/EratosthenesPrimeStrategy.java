@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 @Component
 @ThreadSafe
-public class EratosthenesPrimeStrategy implements PrimeStrategy {
+class EratosthenesPrimeStrategy implements PrimeStrategy {
 
     private static int FIRST_PRIME = 2;
 

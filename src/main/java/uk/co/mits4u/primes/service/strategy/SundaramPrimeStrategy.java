@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 @Component
 @ThreadSafe
-public class SundaramPrimeStrategy implements PrimeStrategy {
+class SundaramPrimeStrategy implements PrimeStrategy {
 
     private static final int FIRST_PRIME = 2;
 
