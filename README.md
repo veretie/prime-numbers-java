@@ -8,8 +8,8 @@
 ### Deployed public instance on EC2
  * REST API is exposed on ```http://mits4u.co.uk:8081/primes-api/index.html```. 
 
-### Locally from IDE
- * Start uk.co.mits4u.primes.Application class
+### Locally
+ * run ```mvn clean spring-boot:run```
  * REST API will be exposed in ```http://localhost:8081/primes-api/index.html```. 
 
 ## Assumptions
