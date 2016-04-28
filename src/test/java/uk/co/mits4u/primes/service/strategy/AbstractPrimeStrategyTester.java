@@ -2,7 +2,6 @@ package uk.co.mits4u.primes.service.strategy;
 
 import org.junit.Test;
 import uk.co.mits4u.primes.service.PrimeStrategy;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,8 +9,7 @@ import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AbstractPrimeStrategyTester {
-
+public abstract class AbstractPrimeStrategyTester {
 
     private PrimeStrategy primeStrategy;
     private int[] primes;
@@ -23,16 +21,12 @@ public class AbstractPrimeStrategyTester {
     }
 
     @Test
-    public void testZero() throws Exception {
-        boolean isPrime = primeStrategy.isPrime(0);
-        assertThat(isPrime).isFalse();
-    }
-
-    @Test
     public void testIsPrime() throws Exception {
 
-        IntStream.of(primes).mapToObj(prime -> primeStrategy.isPrime(prime)).forEach(
-                isPrime -> assertThat(isPrime).isTrue()
+        IntStream.of(primes).forEach((prime) -> {
+                    boolean isPrime = primeStrategy.isPrime(prime);
+                    assertThat(isPrime).as("checking prime " + prime).isTrue();
+                }
         );
 
     }
@@ -40,49 +34,53 @@ public class AbstractPrimeStrategyTester {
     @Test
     public void testIsNotPrime() throws Exception {
 
-        int[] nonPrimes = new int[]{1, 4, 6, 8, 9, 10, 12, 14, 16, 18, 20};
-        IntStream.of(nonPrimes).mapToObj(prime -> primeStrategy.isPrime(prime)).forEach(
-                isPrime -> assertThat(isPrime).isFalse()
+        int[] nonPrimes = new int[]{0, 1, 4, 6, 8, 9, 10, 12, 14, 16, 18, 20};
+        IntStream.of(nonPrimes).forEach((nonPrime) -> {
+                    boolean isPrime = primeStrategy.isPrime(nonPrime);
+                    assertThat(isPrime).as("checking non prime " + nonPrime).isFalse();
+                }
         );
 
     }
 
     @Test
-    public void testGenerateRange() throws Exception {
+    public void testGeneratePrimes() throws Exception {
         Collection<Integer> primeResults = primeStrategy.generatePrimes(100);
         List<Integer> expectedResults = IntStream.of(primes).mapToObj(i -> i).collect(Collectors.toList());
         assertThat(primeResults).containsOnlyElementsOf(expectedResults);
     }
 
+
+    @Test
+    public void testGeneratePrimesZero() throws Exception {
+        Collection<Integer> expectedResults = primeStrategy.generatePrimes(0);
+        assertThat(expectedResults).isEmpty();
+    }
+
+
+    @Test
+    public void testGeneratePrimesOne() throws Exception {
+        Collection<Integer> expectedResults = primeStrategy.generatePrimes(1);
+        assertThat(expectedResults).isEmpty();
+    }
+
+
+    @Test
+    public void testGeneratePrimesTwo() throws Exception {
+        Collection<Integer> expectedResults = primeStrategy.generatePrimes(2);
+        assertThat(expectedResults).containsExactly(2);
+    }
+
     @Test
     public void testIsPrimeBigNumbers() {
-
-        int bigPrime = 101483783;
-        runGcAndPrintDetails(bigPrime);
-
-        boolean isPrime = primeStrategy.isPrime(bigPrime);
+        boolean isPrime = primeStrategy.isPrime(15485867);
         assertThat(isPrime).isTrue();
-
     }
 
     @Test
     public void testIsNotPrimeBigNumbers() {
-
-        int bigPrime = 100000000;
-        runGcAndPrintDetails(bigPrime);
-
-        boolean isPrime = primeStrategy.isPrime(bigPrime);
+        boolean isPrime = primeStrategy.isPrime(15485866);
         assertThat(isPrime).isFalse();
-
     }
-
-    private void runGcAndPrintDetails(int bigPrime) {
-        Runtime runtime = Runtime.getRuntime();
-        runtime.gc();
-        long memoryMbNeeded = bigPrime / 8 / 1024 / 1024;
-        long memoryAvailable = runtime.freeMemory() / 1024 / 1024;
-        System.out.println("approximate memory needed " + memoryMbNeeded + " MB; available: " + memoryAvailable + " MB");
-    }
-
 
 }
