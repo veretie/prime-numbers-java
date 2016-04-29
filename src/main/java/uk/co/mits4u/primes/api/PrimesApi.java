@@ -18,7 +18,7 @@ public interface PrimesApi {
     @Produces(MediaType.APPLICATION_JSON)
     Collection<Integer> getPrimesInRange(@ApiParam(value = "more or equal [default 0]", required = false)
                                          @QueryParam("floor") int floor,
-                                         @ApiParam(value = "less or equal", required = true)
+                                         @ApiParam(value = "less or equal then 2^24 = 16777216", required = true)
                                          @QueryParam("ceiling") int ceiling,
                                          @ApiParam(value = "algorithm", required = false)
                                          @QueryParam("algorithm") @DefaultValue("ERATOSTHENES") AlgorithmName algorithmName);
@@ -27,7 +27,7 @@ public interface PrimesApi {
     @GET
     @Path("/{number}/isPrime")
     @Produces(MediaType.APPLICATION_JSON)
-    boolean isPrime(@ApiParam(value = "less then 2^24 = 16777216", required = true)
+    boolean isPrime(@ApiParam(value = "less or equal then 2^24 = 16777216", required = true)
                     @PathParam("number") int numberToCheck,
                     @ApiParam(value = "algorithm", required = false)
                     @QueryParam("algorithm") @DefaultValue("ERATOSTHENES") AlgorithmName algorithmName);
