@@ -93,4 +93,26 @@ public abstract class AbstractPrimeStrategyTester {
 
     }
 
+    @Test
+    public void testIsPrimeBigNumbersSimultaneously() {
+
+        IntStream.of(16777213, 15485867).parallel().forEach((nonPrime) -> {
+                    boolean isPrime = primeStrategy.isPrime(nonPrime);
+                    assertThat(isPrime).as("checking big prime " + nonPrime).isTrue();
+                }
+        );
+
+    }
+
+    @Test
+    public void testIsNotPrimeBigNumbersSimultaneously() {
+
+        IntStream.of(16777216, 15485866).parallel().forEach((nonPrime) -> {
+                    boolean isPrime = primeStrategy.isPrime(nonPrime);
+                    assertThat(isPrime).as("checking big non prime " + nonPrime).isFalse();
+                }
+        );
+
+    }
+
 }
