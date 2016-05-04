@@ -8,6 +8,7 @@ import org.junit.rules.ExpectedException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.context.annotation.Primary;
 import uk.co.mits4u.primes.api.AlgorithmName;
 import java.util.Collection;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,13 +23,15 @@ public class PrimesServiceTest {
     @Mock
     private NumberValidator numberValidator;
     @Mock
+    private PrimeStrategyFactory primeStrategyFactory;
+    @Mock
     private PrimeStrategy eratosthenesPrimeStrategy;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        primesService.postConstruct();
         doNothing().when(numberValidator).validateNumber(anyInt());
+        when(primeStrategyFactory.getStrategy("ERATOSTHENES")).thenReturn(eratosthenesPrimeStrategy);
         when(eratosthenesPrimeStrategy.isPrime(anyInt())).thenReturn(true);
         when(eratosthenesPrimeStrategy.generatePrimes(anyInt())).thenReturn(Lists.newArrayList(2, 3, 5, 7));
 

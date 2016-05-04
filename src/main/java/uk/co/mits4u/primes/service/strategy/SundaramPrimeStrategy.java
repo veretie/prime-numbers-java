@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-@Component
+@Component("SUNDARAM")
 @ThreadSafe
 class SundaramPrimeStrategy implements PrimeStrategy {
 

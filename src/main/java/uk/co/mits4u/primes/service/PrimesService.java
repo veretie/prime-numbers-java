@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import uk.co.mits4u.primes.api.AlgorithmName;
 import uk.co.mits4u.primes.api.PrimesApi;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.*;
 
@@ -17,20 +16,10 @@ import static java.lang.String.format;
 public class PrimesService implements PrimesApi {
 
     private static Logger logger = Logger.getLogger(PrimesService.class);
-    private Map<AlgorithmName, PrimeStrategy> strategies;
     @Resource
     private NumberValidator numberValidator;
     @Resource
-    private PrimeStrategy eratosthenesPrimeStrategy;
-    @Resource
-    private PrimeStrategy sundaramPrimeStrategy;
-
-    @PostConstruct
-    protected void postConstruct() {
-        strategies = new EnumMap<>(AlgorithmName.class);
-        strategies.put(AlgorithmName.ERATOSTHENES, eratosthenesPrimeStrategy);
-        strategies.put(AlgorithmName.SUNDARAM, sundaramPrimeStrategy);
-    }
+    private PrimeStrategyFactory primeStrategyFactory;
 
     @Override
     public boolean isPrime(int numberToCheck, AlgorithmName algorithmName) {
@@ -71,7 +60,7 @@ public class PrimesService implements PrimesApi {
 
     private PrimeStrategy resolveStrategy(AlgorithmName algorithm) {
 
-        PrimeStrategy primeStrategy = strategies.get(algorithm);
+        PrimeStrategy primeStrategy = primeStrategyFactory.getStrategy(algorithm.name());
 
         Validate.notNull(primeStrategy, "Could note resolve prime strategy for '" + algorithm + "' algorithm");
 

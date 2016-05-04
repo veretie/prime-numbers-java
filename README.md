@@ -8,9 +8,15 @@
 ### Deployed public instance on EC2
  * REST API is exposed on ```http://mits4u.co.uk:8081/primes-api/index.html```. 
 
-### Locally
- * run ```mvn clean spring-boot:run```
+### Build & run locally
+ * to build an application as far runnable JAR run ```mvn clean package```
+ * to run an application you can either:
+  - run it directly from the code base with ```mvn clean spring-boot:run``` command
+  - run it using the fat JAR with ```java -Xmx[MAXIMUM-size]m -Xms[INITIAL-SIZE]m -jar prime-numbers-[VERSION].jar```
  * REST API will be exposed in ```http://localhost:8081/primes-api/index.html```. 
+
+### Deploy the application to target environment
+ * CI/CD would be needed
 
 ## Assumptions
  * **Caching** is out of scope. Might consider adding caching layer, auto cache warm-up, etc.

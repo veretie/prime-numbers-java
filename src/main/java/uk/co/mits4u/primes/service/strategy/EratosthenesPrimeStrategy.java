@@ -1,7 +1,10 @@
 package uk.co.mits4u.primes.service.strategy;
 
 import com.google.common.collect.Lists;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import uk.co.mits4u.primes.api.AlgorithmName;
+import uk.co.mits4u.primes.api.PrimesApi;
 import uk.co.mits4u.primes.service.PrimeStrategy;
 
 import javax.annotation.concurrent.ThreadSafe;
@@ -10,7 +13,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-@Component
+@Component("ERATOSTHENES")
 @ThreadSafe
 class EratosthenesPrimeStrategy implements PrimeStrategy {
 
