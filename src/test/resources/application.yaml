@@ -1,0 +1,10 @@
+spring.main.show_banner: false
+
+management.port: 8081
+management.context-path: /manage
+server.port: 8081
+
+primes.sundaram.thread.count: 10
+
+logging.file: prime-numbers.log
+logging.level.uk.co.mits4u.primes: DEBUG
