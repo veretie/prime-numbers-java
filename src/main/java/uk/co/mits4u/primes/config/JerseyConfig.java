@@ -17,7 +17,6 @@ public class JerseyConfig extends ResourceConfig {
     public JerseyConfig() {
         registerEndpoints();
         configureSwagger();
-        packages(this.getClass().getPackage().toString());
     }
 
     private void configureSwagger() {
