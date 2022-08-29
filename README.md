@@ -10,7 +10,8 @@
  * to build an application as far runnable JAR run ```mvn clean package```
  * to run an application: ```mvn clean spring-boot:run```
 
- * REST API will be exposed in: http://localhost:8081 
+ * REST API will be exposed in: http://localhost:8081 ![API example](docs/api-sample.png)
+
 
 ### Deploy the application to target environment
  * CI/CD would be needed
