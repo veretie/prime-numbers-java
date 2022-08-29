@@ -1,7 +1,8 @@
 # prime-numbers service
 
 ## What does is do?
- **generates/checks prime numbers** via exposed REST service.
+ 1. generates prime numbers
+ 2. checks if provided number is prime 
  
 ## How to use it?
 
@@ -9,7 +10,7 @@
  * to build an application as far runnable JAR run ```mvn clean package```
  * to run an application: ```mvn clean spring-boot:run```
 
- * REST API will be exposed in: http://localhost:8081/primes-api/index.html. 
+ * REST API will be exposed in: http://localhost:8081 
 
 ### Deploy the application to target environment
  * CI/CD would be needed

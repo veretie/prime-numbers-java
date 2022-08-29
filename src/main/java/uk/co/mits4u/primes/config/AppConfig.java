@@ -10,7 +10,7 @@ public class AppConfig {
 
     @Bean
     public ServiceLocatorFactoryBean primeStrategyFactory() {
-        ServiceLocatorFactoryBean locatorFactoryBean = new ServiceLocatorFactoryBean();
+        var locatorFactoryBean = new ServiceLocatorFactoryBean();
         locatorFactoryBean.setServiceLocatorInterface(PrimeStrategyFactory.class);
         return locatorFactoryBean;
     }

@@ -1,10 +1,7 @@
 package uk.co.mits4u.primes.service.strategy;
 
 import com.google.common.collect.Lists;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import uk.co.mits4u.primes.api.AlgorithmName;
-import uk.co.mits4u.primes.api.PrimesApi;
 import uk.co.mits4u.primes.service.PrimeStrategy;
 
 import javax.annotation.concurrent.ThreadSafe;
@@ -21,7 +18,7 @@ class EratosthenesPrimeStrategy implements PrimeStrategy {
 
     @Override
     public boolean isPrime(int numberToCheck) {
-        Collection<Integer> primes = generatePrimes(numberToCheck);
+        var primes = generatePrimes(numberToCheck);
         return primes.contains(numberToCheck);
     }
 
@@ -32,18 +29,18 @@ class EratosthenesPrimeStrategy implements PrimeStrategy {
             return Lists.newLinkedList();
         }
 
-        boolean[] primeFlags = initAllAsPrime(maxPrime);
+        var primeFlags = initAllAsPrime(maxPrime);
 
         markNonPrimes(maxPrime, primeFlags);
 
-        Collection<Integer> primes = collectPrimes(primeFlags);
+        var primes = collectPrimes(primeFlags);
 
         return primes;
 
     }
 
     private boolean[] initAllAsPrime(int limit) {
-        boolean[] flags = new boolean[limit + 1];
+        var flags = new boolean[limit + 1];
         Arrays.fill(flags, true);
         return flags;
     }
@@ -53,7 +50,8 @@ class EratosthenesPrimeStrategy implements PrimeStrategy {
         int maxPotentialPrime = (int) Math.sqrt(limit);
 
         Stream.iterate(FIRST_PRIME, i -> ++i).limit(maxPotentialPrime - 1)
-                .parallel().forEach(potentialPrime -> markMultiplesAsNonPrimes(potentialPrime, primeFlags)
+                .parallel()
+                .forEach(potentialPrime -> markMultiplesAsNonPrimes(potentialPrime, primeFlags)
         );
 
     }

@@ -13,12 +13,12 @@ import uk.co.mits4u.primes.api.ExceptionData;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
     public ResponseEntity<Object> handleGenericException(Exception e) {
-        log.error(e.getMessage(), e);
+        LOGGER.error(e.getMessage(), e);
         return new ResponseEntity<>(new ExceptionData(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 

@@ -16,7 +16,7 @@ import static java.lang.String.format;
 @Service
 public class PrimesService implements PrimesApi {
 
-    private static Logger logger = LoggerFactory.getLogger(PrimesService.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(PrimesService.class);
     @Resource
     private NumberValidator numberValidator;
     @Resource
@@ -26,7 +26,7 @@ public class PrimesService implements PrimesApi {
     public boolean isPrime(int numberToCheck, AlgorithmName algorithmName) {
 
         String params = format("number=[%s], algorithm=[%s]", numberToCheck, algorithmName);
-        logger.info("starting isPrime with [" + params + "]");
+        LOGGER.info("starting isPrime with [" + params + "]");
         long start = System.currentTimeMillis();
 
         numberValidator.validateNumber(numberToCheck);
@@ -34,7 +34,7 @@ public class PrimesService implements PrimesApi {
         boolean isPrime = primeStrategy.isPrime(numberToCheck);
 
         long timeTaken = System.currentTimeMillis() - start;
-        logger.info(format("finished isPrime with [%s] in %s ms -> result: [%s]", params, timeTaken, isPrime));
+        LOGGER.info(format("finished isPrime with [%s] in %s ms -> result: [%s]", params, timeTaken, isPrime));
 
         return isPrime;
     }
@@ -43,7 +43,7 @@ public class PrimesService implements PrimesApi {
     public Collection<Integer> getPrimesInRange(int floor, int ceiling, AlgorithmName algorithmName) {
 
         String params = format("range=[%s, %s], algorithm=[%s]", floor, ceiling, algorithmName);
-        logger.info("starting calculation with [" + params + "]");
+        LOGGER.info("starting calculation with [" + params + "]");
         long start = System.currentTimeMillis();
 
         numberValidator.validateRange(floor, ceiling);
@@ -53,7 +53,7 @@ public class PrimesService implements PrimesApi {
         ImmutableSortedSet<Integer> primesInRange = ImmutableSortedSet.copyOf(allPrimes).subSet(floor, true, ceiling, true);
 
         long timeTaken = System.currentTimeMillis() - start;
-        logger.info(format("ended calculation with [%s] in %s ms -> found %s primes ", params, timeTaken, primesInRange.size()));
+        LOGGER.info(format("ended calculation with [%s] in %s ms -> found %s primes ", params, timeTaken, primesInRange.size()));
 
         return primesInRange;
 

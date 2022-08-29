@@ -40,7 +40,7 @@ class SundaramPrimeStrategy implements PrimeStrategy {
 
     @Override
     public boolean isPrime(int numberToCheck) {
-        Collection<Integer> primes = generatePrimes(numberToCheck);
+        var primes = generatePrimes(numberToCheck);
         return primes.contains(numberToCheck);
     }
 
@@ -53,18 +53,18 @@ class SundaramPrimeStrategy implements PrimeStrategy {
 
         int maxPrimeInclusive = maxPrime + 1;
 
-        boolean[] primeFlags = initAllAsPrime(maxPrimeInclusive);
+        var primeFlags = initAllAsPrime(maxPrimeInclusive);
 
         markNonPrimes(maxPrimeInclusive, primeFlags);
 
-        Collection<Integer> primes = collectPrimes(primeFlags, maxPrimeInclusive);
+        var primes = collectPrimes(primeFlags, maxPrimeInclusive);
 
         return primes;
 
     }
 
     private boolean[] initAllAsPrime(int limit) {
-        boolean[] flags = new boolean[limit];
+        var flags = new boolean[limit];
         Arrays.fill(flags, true);
         return flags;
     }
@@ -75,8 +75,8 @@ class SundaramPrimeStrategy implements PrimeStrategy {
 
             int n = getSundaramLimit(limit);
 
-            Collection<ImmutablePair<Integer, Integer>> ranges = splitToRanges(n, threadCount);
-            CountDownLatch countDownLatch = new CountDownLatch(ranges.size());
+            var ranges = splitToRanges(n, threadCount);
+            var countDownLatch = new CountDownLatch(ranges.size());
 
             ranges.forEach(range ->
 
@@ -102,7 +102,7 @@ class SundaramPrimeStrategy implements PrimeStrategy {
 
     private Collection<Integer> collectPrimes(boolean[] primeFlags, int limit) {
 
-        final Collection<Integer> primes = Lists.newLinkedList();
+        var primes = Lists.<Integer>newLinkedList();
         primes.add(FIRST_PRIME);
 
         boolean indexForPrime = true;
@@ -121,7 +121,7 @@ class SundaramPrimeStrategy implements PrimeStrategy {
 
         int rangeSize = n % slots == 0 ? n / slots : (n / slots) + 1;
 
-        Collection<ImmutablePair<Integer, Integer>> ranges = Stream.iterate(0, (left) -> left + rangeSize)
+        var ranges = Stream.iterate(0, (left) -> left + rangeSize)
                 .limit(slots)
                 .map((left) -> new ImmutablePair<>(left, left + rangeSize < n ? left + rangeSize : n))
                 .filter((p) -> p.left < n)
