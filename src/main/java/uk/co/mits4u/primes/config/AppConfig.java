@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import uk.co.mits4u.primes.service.PrimeStrategyFactory;
 
 @Configuration
-public class WebMvcConfig {
+public class AppConfig {
 
     @Bean
     public ServiceLocatorFactoryBean primeStrategyFactory() {
