@@ -25,15 +25,15 @@ public class PrimesService implements PrimesApi {
     @Override
     public boolean isPrime(int numberToCheck, AlgorithmName algorithmName) {
 
-        String params = format("number=[%s], algorithm=[%s]", numberToCheck, algorithmName);
+        var params = format("number=[%s], algorithm=[%s]", numberToCheck, algorithmName);
         LOGGER.info("starting isPrime with [" + params + "]");
-        long start = System.currentTimeMillis();
+        var start = System.currentTimeMillis();
 
         numberValidator.validateNumber(numberToCheck);
-        PrimeStrategy primeStrategy = resolveStrategy(algorithmName);
-        boolean isPrime = primeStrategy.isPrime(numberToCheck);
+        var primeStrategy = resolveStrategy(algorithmName);
+        var isPrime = primeStrategy.isPrime(numberToCheck);
 
-        long timeTaken = System.currentTimeMillis() - start;
+        var timeTaken = System.currentTimeMillis() - start;
         LOGGER.info(format("finished isPrime with [%s] in %s ms -> result: [%s]", params, timeTaken, isPrime));
 
         return isPrime;
@@ -42,17 +42,17 @@ public class PrimesService implements PrimesApi {
     @Override
     public Collection<Integer> getPrimesInRange(int floor, int ceiling, AlgorithmName algorithmName) {
 
-        String params = format("range=[%s, %s], algorithm=[%s]", floor, ceiling, algorithmName);
+        var params = format("range=[%s, %s], algorithm=[%s]", floor, ceiling, algorithmName);
         LOGGER.info("starting calculation with [" + params + "]");
-        long start = System.currentTimeMillis();
+        var start = System.currentTimeMillis();
 
         numberValidator.validateRange(floor, ceiling);
-        PrimeStrategy primeStrategy = resolveStrategy(algorithmName);
+        var primeStrategy = resolveStrategy(algorithmName);
 
-        Collection<Integer> allPrimes = primeStrategy.generatePrimes(ceiling);
-        ImmutableSortedSet<Integer> primesInRange = ImmutableSortedSet.copyOf(allPrimes).subSet(floor, true, ceiling, true);
+        var allPrimes = primeStrategy.generatePrimes(ceiling);
+        var primesInRange = ImmutableSortedSet.copyOf(allPrimes).subSet(floor, true, ceiling, true);
 
-        long timeTaken = System.currentTimeMillis() - start;
+        var timeTaken = System.currentTimeMillis() - start;
         LOGGER.info(format("ended calculation with [%s] in %s ms -> found %s primes ", params, timeTaken, primesInRange.size()));
 
         return primesInRange;
@@ -61,7 +61,7 @@ public class PrimesService implements PrimesApi {
 
     private PrimeStrategy resolveStrategy(AlgorithmName algorithm) {
 
-        PrimeStrategy primeStrategy = primeStrategyFactory.getStrategy(algorithm.name());
+        var primeStrategy = primeStrategyFactory.getStrategy(algorithm.name());
 
         Validate.notNull(primeStrategy, "Could note resolve prime strategy for '" + algorithm + "' algorithm");
 
