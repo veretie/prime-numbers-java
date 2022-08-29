@@ -2,18 +2,13 @@ package uk.co.mits4u.primes.service;
 
 import com.google.common.collect.ImmutableSortedSet;
 import org.apache.commons.lang3.Validate;
-import org.apache.log4j.Logger;
-import org.springframework.context.annotation.Bean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import uk.co.mits4u.primes.api.AlgorithmName;
 import uk.co.mits4u.primes.api.PrimesApi;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
 import java.util.*;
 
 import static java.lang.String.format;
@@ -21,7 +16,7 @@ import static java.lang.String.format;
 @Service
 public class PrimesService implements PrimesApi {
 
-    private static Logger logger = Logger.getLogger(PrimesService.class);
+    private static Logger logger = LoggerFactory.getLogger(PrimesService.class);
     @Resource
     private NumberValidator numberValidator;
     @Resource

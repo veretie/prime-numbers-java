@@ -1,23 +1,21 @@
 package uk.co.mits4u.primes.service;
 
 import com.google.common.collect.Lists;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.context.annotation.Primary;
 import uk.co.mits4u.primes.api.AlgorithmName;
+
 import java.util.Collection;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class PrimesServiceTest {
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
     @InjectMocks
     private PrimesService primesService;
     @Mock
@@ -27,7 +25,7 @@ public class PrimesServiceTest {
     @Mock
     private PrimeStrategy eratosthenesPrimeStrategy;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         doNothing().when(numberValidator).validateNumber(anyInt());
@@ -44,10 +42,10 @@ public class PrimesServiceTest {
         assertThat(isPrime).isTrue();
     }
 
-    @Test(expected = IllegalArgumentException.class)
     public void testIsPrimeWhenValidatorThrowsException() throws Exception {
         doThrow(new IllegalArgumentException()).when(numberValidator).validateNumber(-1);
-        primesService.isPrime(-1, AlgorithmName.ERATOSTHENES);
+        Assertions.assertThatThrownBy(() -> primesService.isPrime(-1, AlgorithmName.ERATOSTHENES))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -57,10 +55,10 @@ public class PrimesServiceTest {
         assertThat(results).containsExactly(2, 3, 5, 7);
     }
 
-    @Test(expected = IllegalArgumentException.class)
     public void testGetPrimesWithValidationException() throws Exception {
         doThrow(new IllegalArgumentException()).when(numberValidator).validateRange(100, 1);
-        primesService.getPrimesInRange(100, 1, AlgorithmName.ERATOSTHENES);
+        Assertions.assertThatThrownBy(() -> primesService.getPrimesInRange(100, 1, AlgorithmName.ERATOSTHENES))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -79,9 +77,10 @@ public class PrimesServiceTest {
 
     @Test
     public void testUnknownStrategy() throws Exception {
-        expectedException.expect(NullPointerException.class);
-        expectedException.expectMessage("Could note resolve prime strategy for 'SUNDARAM' algorithm");
-        primesService.getPrimesInRange(1, 10, AlgorithmName.SUNDARAM);
+        Assertions.assertThatThrownBy(() -> primesService.getPrimesInRange(1, 10, AlgorithmName.SUNDARAM))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessageContaining("Could note resolve prime strategy for 'SUNDARAM' algorithm");
+
     }
 
 }

@@ -1,16 +1,13 @@
 package uk.co.mits4u.primes.service;
 
-import javafx.animation.KeyValue;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.stereotype.Component;
 
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static uk.co.mits4u.primes.service.NumberValidator.MAX_NUMBER;
@@ -18,12 +15,10 @@ import static uk.co.mits4u.primes.service.NumberValidator.MAX_NUMBER;
 @Component
 public class NumberValidatorTest {
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
     @InjectMocks
     private NumberValidator numberValidator;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
     }
@@ -46,44 +41,48 @@ public class NumberValidatorTest {
     @Test
     public void testValidateCorrectRange() throws Exception {
         Stream.of(ImmutablePair.of(0, 1), ImmutablePair.of(0, 2), ImmutablePair.of(1, 1), ImmutablePair.of(1, 2),
-                ImmutablePair.of(100, 55000), ImmutablePair.of(1, 100000), ImmutablePair.of(0, 900000), ImmutablePair.of(9000, MAX_NUMBER))
+                        ImmutablePair.of(100, 55000), ImmutablePair.of(1, 100000), ImmutablePair.of(0, 900000), ImmutablePair.of(9000, MAX_NUMBER))
                 .forEach(range -> numberValidator.validateRange(0, 1));
     }
 
 
     @Test
     public void testValidateMaximumPossibleRange() throws Exception {
-        expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("prime cannot be negative. [-2147483648] is invalid");
-        numberValidator.validateRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
+
+        Assertions.assertThatThrownBy(() -> numberValidator.validateRange(Integer.MIN_VALUE, Integer.MAX_VALUE))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("prime cannot be negative. [-2147483648] is invalid");
     }
 
     @Test
     public void testValidateMaximumPossiblePositiveRange() throws Exception {
-        expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("[2147483647] is invalid. Select number <= 16777216 = 2^24");
-        numberValidator.validateRange(0, Integer.MAX_VALUE);
+        Assertions.assertThatThrownBy(() -> numberValidator.validateRange(0, Integer.MAX_VALUE))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("[2147483647] is invalid. Select number <= 16777216 = 2^24");
     }
 
     @Test
     public void testValidateFloorBiggerThenCeiling() throws Exception {
-        expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("floor [1] cannot be higher then ceiling [0]");
-        numberValidator.validateRange(1, 0);
+        Assertions.assertThatThrownBy(() -> numberValidator.validateRange(1, 0))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("floor [1] cannot be higher then ceiling [0]");
+
     }
 
     @Test
     public void testMaxInt() throws Exception {
-        expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("[2147483647] is invalid. Select number <= 16777216 = 2^24");
-        numberValidator.validateNumber(Integer.MAX_VALUE);
+        Assertions.assertThatThrownBy(() -> numberValidator.validateNumber(Integer.MAX_VALUE))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("[2147483647] is invalid. Select number <= 16777216 = 2^24");
+
     }
 
     @Test
     public void testMinInt() throws Exception {
-        expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("prime cannot be negative. [-2147483648] is invalid");
-        numberValidator.validateNumber(Integer.MIN_VALUE);
+        Assertions.assertThatThrownBy(() -> numberValidator.validateNumber(Integer.MIN_VALUE))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("prime cannot be negative. [-2147483648] is invalid");
+
     }
 
     @Test
@@ -98,16 +97,17 @@ public class NumberValidatorTest {
 
     @Test
     public void testNegativeNumber() throws Exception {
-        expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("prime cannot be negative. [-1] is invalid");
-        numberValidator.validateNumber(-1);
+        Assertions.assertThatThrownBy(() -> numberValidator.validateNumber(-1))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("prime cannot be negative. [-1] is invalid");
+
     }
 
     @Test
     public void testNumberTooBig() throws Exception {
-        expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("[16777217] is invalid. Select number <= 16777216 = 2^24");
-        numberValidator.validateNumber(MAX_NUMBER + 1);
+        Assertions.assertThatThrownBy(() -> numberValidator.validateNumber(MAX_NUMBER + 1))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("[16777217] is invalid. Select number <= 16777216 = 2^24");
     }
 
 

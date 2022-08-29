@@ -1,14 +1,12 @@
 package uk.co.mits4u.primes.api;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
 import uk.co.mits4u.primes.Application;
 
 import java.net.URL;
@@ -16,7 +14,6 @@ import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PrimesApiIT {
 
@@ -26,7 +23,7 @@ public class PrimesApiIT {
     private URL base;
     private TestRestTemplate template;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         template = new TestRestTemplate();
     }
@@ -63,9 +60,9 @@ public class PrimesApiIT {
         base = new URL("http://localhost:" + port + "/numbers/101/isPrime?algorithm=SUNDARAM");
         ResponseEntity<Boolean> response = template.getForEntity(base.toString(), Boolean.class);
 
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         Boolean isPrime = response.getBody();
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(isPrime).isTrue();
 
     }
@@ -74,11 +71,12 @@ public class PrimesApiIT {
     public void calculatePrimesWithDefaults() throws Exception {
 
         base = new URL("http://localhost:" + port + "/numbers/primes?ceiling=10");
+
         ResponseEntity<Collection> response = template.getForEntity(base.toString(), Collection.class);
 
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         Collection<Integer> primes = response.getBody();
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(primes).containsExactly(2, 3, 5, 7);
 
     }
@@ -89,9 +87,9 @@ public class PrimesApiIT {
         base = new URL("http://localhost:" + port + "/numbers/primes?floor=0&ceiling=10&algorithm=SUNDARAM");
         ResponseEntity<Collection> response = template.getForEntity(base.toString(), Collection.class);
 
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         Collection<Integer> primes = response.getBody();
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(primes).containsExactly(2, 3, 5, 7);
 
     }
@@ -102,7 +100,7 @@ public class PrimesApiIT {
         base = new URL("http://localhost:" + port + "/numbers/one/isPrime");
         ResponseEntity<String> response = template.getForEntity(base.toString(), String.class);
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 
     }
 
@@ -112,9 +110,9 @@ public class PrimesApiIT {
         base = new URL("http://localhost:" + port + "/numbers/primes?floor=10&ceiling=1");
         ResponseEntity<String> response = template.getForEntity(base.toString(), String.class);
 
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         String responseBody = response.getBody();
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(responseBody).contains("floor [10] cannot be higher then ceiling [1]");
 
     }

@@ -1,6 +1,9 @@
 package uk.co.mits4u.primes.service.strategy;
 
-import org.junit.*;
+//import org.junit.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.util.stream.IntStream;
 
@@ -10,14 +13,14 @@ public class SundaramPrimeStrategyTest extends AbstractPrimeStrategyTester {
 
     private static SundaramPrimeStrategy sundaramPrimeStrategy;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpBeforeClass() {
         sundaramPrimeStrategy = new SundaramPrimeStrategy();
         sundaramPrimeStrategy.setThreadCount(2);
         sundaramPrimeStrategy.construct();
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDown() {
         sundaramPrimeStrategy.destroy();
     }
