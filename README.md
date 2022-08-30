@@ -36,5 +36,8 @@
 
  * We might utilize [floor, ceiling] range in each of the strategy itself. That would help saving space when result collection is large and we will need to trim it adjusting to range anyway. Decided that extra implementation complexity is not worth the trouble. 
  * Considering big numbers, space complexity is very important here, so chose boolean[] instead of Boolean Vector. Also space for primes result collection would be something to watch out if to increase ceiling limitation.
- * Eratosthenes implementation uses Java 8 parallel streams backed with ForkJoinPool and auto-assigned number of threads.
+ * Eratosthenes implementation uses parallel streams backed with ForkJoinPool and auto-assigned number of threads.
  * Sundaram implementation with parallel streams showed very poor performance on > 2^20 numbers. Decided to use custom ExecutorService with CountDownLatch approach to give more flexibility to number of threads used. Extra implementation and testing effort, heavily improved performance though.
+
+## Kotlin
+ * Kotlin implementation can be found [here](https://github.com/veretie/prime-numbers-kotlin)
