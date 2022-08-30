@@ -1,4 +1,4 @@
-# prime-numbers service
+# prime-numbers-java service
 
 ## What does is do?
  1. generates prime numbers
